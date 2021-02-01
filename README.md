@@ -1,2 +1,2 @@
 # applicationBDOS
-This is the master repository for the streamlit application fo BDOS
+This is the master repository for the streamlit application for BDOS
