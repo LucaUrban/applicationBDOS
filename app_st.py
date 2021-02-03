@@ -64,3 +64,5 @@ multi_plot.update_traces(customdata = table[multi_index])
 multi_plot.update_xaxes(title = multiXax_col)
 multi_plot.update_yaxes(title = multiYax_col)
 multi_plot.update_layout(clickmode = 'event')
+
+st.plotly_chart(multi_plot, use_container_width=True)
