@@ -57,37 +57,10 @@ multi_index = st.sidebar.selectbox("multivariable index col", table.columns, 1)
 multiXax_col = st.sidebar.selectbox("multivariable X axis col", col_mul, 1)
 multiYax_col = st.sidebar.selectbox("multivariable Y axis col", col_mul, 2)
 
-def create_time_series(dff, title, id_col, time_col):
-    fig = go.Figure()
-    if dff.shape[0] != 0:
-        x_bar = []
-        for inst in table[id_col].unique():
-            inst_data = table[table[id_col] == inst][list(dff)[1]]
-            if inst_data.count() != 0:
-                x_bar.append(inst_data.mean())
-
-        x_barbar = round(sum(x_bar)/len(x_bar), 3)
-
-        x_LCL = x_barbar - (1.88 * (dff[list(dff)[1]].quantile(0.95) - dff[list(dff)[1]].quantile(0.05)))
-        x_UCL = x_barbar + (1.88 * (dff[list(dff)[1]].quantile(0.95) - dff[list(dff)[1]].quantile(0.05)))
-
-        x_el = [i for i in range(int(dff[time_col].min()), int(dff[time_col].max()) + 1)]
-        fig.add_trace(go.Scatter(x = dff[time_col], y = dff[list(dff)[1]], mode = 'lines+markers', name = "Value"))
-        fig.add_trace(go.Scatter(x = x_el, y = [x_UCL for _ in range(len(x_el))], mode = "lines", name = "Upper Bound"))
-        fig.add_trace(go.Scatter(x = x_el, y = [x_LCL for _ in range(len(x_el))], mode = "lines", name = "Lower Bound"))
-        fig.update_xaxes(showgrid=False)
-        fig.add_annotation(x=0, y=0.85, xanchor='left', yanchor='bottom',
-                           xref='paper', yref='paper', showarrow=False, align='left',
-                           bgcolor='rgba(255, 255, 255, 0.5)', text = title)
-        fig.update_layout(xaxis_title = time_col, yaxis_title = list(dff)[1])
-        fig.update_layout(height = 245, margin = {'l': 20, 'b': 30, 'r': 10, 't': 10})
-    return fig
-
 fig_tot = make_subplots(rows=2, cols=2, specs=[[{"rowspan": 2}, {}], [None, {}]])
 
-dff = table[table[multi_time] == multiSlider]
-multi_plot = px.scatter(x = dff[multiXax_col], y = dff[multiYax_col], hover_name = dff[multi_index])
-multi_plot.update_traces(customdata = dff[multi_index])
+multi_plot = px.scatter(x = table[multiXax_col], y = table[multiYax_col], hover_name = table[multi_index])
+multi_plot.update_traces(customdata = table[multi_index])
 multi_plot.update_xaxes(title = multiXax_col)
 multi_plot.update_yaxes(title = multiYax_col)
 multi_plot.update_layout(clickmode = 'event')
