@@ -54,13 +54,8 @@ st.header("Multivariable Analysis")
 
 st.sidebar.subheader("Multivariable Area")
 multi_index = st.sidebar.selectbox("multivariable index col", table.columns, 1)
-multi_time = st.sidebar.selectbox("multivariable time col", table.columns, 3)
 multiXax_col = st.sidebar.selectbox("multivariable X axis col", col_mul, 1)
 multiYax_col = st.sidebar.selectbox("multivariable Y axis col", col_mul, 2)
-multiSlider = st.sidebar.slider("multivarible time value", int(table[multi_time].min()), int(table[multi_time].max()), int(table[multi_time].min()))
-
-def myFun():
-    return 1
 
 def create_time_series(dff, title, id_col, time_col):
     fig = go.Figure()
@@ -100,7 +95,3 @@ multi_plot.update_layout(clickmode = 'event')
 #fig_tot.add_trace(multi_plot, row=1, col=1)
 #fig_tot.add_trace(create_time_series(dff, "", multi_index, multi_time), row=1, col=2)
 #fig_tot.add_trace(create_time_series(dff, "", multi_index, multi_time), row=2, col=2)
-
-st.plotly_chart(multi_plot, use_container_width=True)
-a = multi_plot.data[0].on_click(myFun)
-st.write(a)
