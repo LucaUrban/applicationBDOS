@@ -66,3 +66,61 @@ multi_plot.update_yaxes(title = multiYax_col)
 multi_plot.update_layout(clickmode = 'event')
 
 st.plotly_chart(multi_plot, use_container_width=True)
+
+# pareto chart with feature importance on huber regressor
+st.header("Feature Importance Analysis")
+
+fea_Imp_features = st.multiselect("Feature Importance multiselectin box:", col_mul)
+scaler = StandardScaler(); train_nm = scaler.fit_transform(train[fea_Imp_features])
+Alpha = [.1, 1, 10, 100]; titles = tuple("Feature importance for alpha = " + str(alpha) for alpha in Alpha)
+Alpha = [[.1, 1], [10, 100]]
+
+# Create figure with secondary y-axis
+fig_tot = make_subplots(rows = 2, cols = 2, 
+                        specs = [[{"secondary_y": True}, {"secondary_y": True}], 
+                                 [{"secondary_y": True}, {"secondary_y": True}]], 
+                        subplot_titles = titles)
+
+for num_row in range(2):
+    for num_col in range(2):
+        clf = Ridge(alpha = Alpha[num_row][num_col])
+        clf.fit(train_nm, table[target])
+
+        importance = clf.coef_
+        for i in range(len(importance)):
+            if importance[i] < 0:
+                importance[i] *= -1
+        dict_fin = {list(train)[i]: importance[i] for i in range(len(importance))}
+        dict_fin = {k: v for k, v in sorted(dict_fin.items(), key=lambda item: item[1], reverse = True)}
+        dict_fin_per = {list(train)[i]: (importance[i]/sum(importance))*100 for i in range(len(importance))}
+        dict_fin_per = {k: v for k, v in sorted(dict_fin_per.items(), key=lambda item: item[1], reverse = True)}
+        lis_final = []; res_par = 0
+        for value in dict_fin_per.values():
+            res_par += value; lis_final.append(res_par)
+
+        fig_tot.add_trace(
+            go.Bar(x = list(dict_fin_per.keys()), y = list(dict_fin_per.values()), 
+                   marker_color = 'rgb(158,202,225)', marker_line_color = 'rgb(8,48,107)', 
+                   marker_line_width = 1.5, opacity = 0.6, name = 'Value'),
+            row = num_row + 1, col = num_col + 1, secondary_y = False
+        )
+
+        fig_tot.add_trace(
+            go.Scatter(x = list(dict_fin_per.keys()), y = lis_final, line_color = 'rgb(255, 150, 0)'),
+            row = num_row + 1, col = num_col + 1, secondary_y = True
+        )
+
+        # Add figure title
+        fig_tot.update_layout(
+            title_text = "Feature importances", showlegend = False
+        )
+
+        # Set x-axis title
+        fig_tot.update_xaxes(title_text = "Variables")
+
+        # Set y-axes titles
+        fig_tot.update_yaxes(title_text="<b>Value</b> of importance", secondary_y=False)
+        fig_tot.update_yaxes(title_text="<b>%</b> of importance", secondary_y=True)
+
+fig_tot.update_layout(height = 600)
+st.plotly_chart(fig_tot, use_container_width=True)
