@@ -71,7 +71,7 @@ st.plotly_chart(multi_plot, use_container_width=True)
 st.header("Feature Importance Analysis")
 
 fea_Imp_features = st.multiselect("Feature Importance multiselectin box:", col_mul)
-scaler = StandardScaler(); train_nm = scaler.fit_transform(train[fea_Imp_features])
+scaler = StandardScaler(); train_nm = scaler.fit_transform(table[fea_Imp_features])
 Alpha = [.1, 1, 10, 100]; titles = tuple("Feature importance for alpha = " + str(alpha) for alpha in Alpha)
 Alpha = [[.1, 1], [10, 100]]
 
