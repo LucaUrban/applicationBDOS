@@ -90,9 +90,9 @@ for num_row in range(2):
         for i in range(len(importance)):
             if importance[i] < 0:
                 importance[i] *= -1
-        dict_fin = {list(train)[i]: importance[i] for i in range(len(importance))}
+        dict_fin = {list(train_nm)[i]: importance[i] for i in range(len(importance))}
         dict_fin = {k: v for k, v in sorted(dict_fin.items(), key=lambda item: item[1], reverse = True)}
-        dict_fin_per = {list(train)[i]: (importance[i]/sum(importance))*100 for i in range(len(importance))}
+        dict_fin_per = {list(train_nm)[i]: (importance[i]/sum(importance))*100 for i in range(len(importance))}
         dict_fin_per = {k: v for k, v in sorted(dict_fin_per.items(), key=lambda item: item[1], reverse = True)}
         lis_final = []; res_par = 0
         for value in dict_fin_per.values():
