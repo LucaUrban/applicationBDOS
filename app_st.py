@@ -84,7 +84,7 @@ fig_tot = make_subplots(rows = 2, cols = 2,
 for num_row in range(2):
     for num_col in range(2):
         clf = Ridge(alpha = Alpha[num_row][num_col])
-        clf.fit(train_nm, table[target])
+        clf.fit(train_nm, table["Expected"])
 
         importance = clf.coef_
         for i in range(len(importance)):
