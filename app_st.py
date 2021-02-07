@@ -91,9 +91,9 @@ for num_row in range(2):
             if importance[i] < 0:
                 importance[i] *= -1
         st.error(fea_Imp_features)
-        dict_fin = {train_nm.columns[i]: importance[i] for i in range(importance.shape[0])}
+        dict_fin = {fea_Imp_features[i]: importance[i] for i in range(importance.shape[0])}
         dict_fin = {k: v for k, v in sorted(dict_fin.items(), key=lambda item: item[1], reverse = True)}
-        dict_fin_per = {train_nm.columns[i]: (importance[i] / np.sum(importance)) * 100 for i in range(importance.shape[0])}
+        dict_fin_per = {fea_Imp_features[i]: (importance[i] / np.sum(importance)) * 100 for i in range(importance.shape[0])}
         dict_fin_per = {k: v for k, v in sorted(dict_fin_per.items(), key=lambda item: item[1], reverse = True)}
         lis_final = []; res_par = 0
         for value in dict_fin_per.values():
